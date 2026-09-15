@@ -55,7 +55,7 @@ def train_fn(train_loader, model, optimizer, loss_fn, scaler, scaled_anchors): #
 
 def main():
     model = YOLOv3(num_classes=config.NUM_CLASSES).to(config.DEVICE) # create model, moving model to GPU
-    if torch.cuda.device_count() > 1:
+    if torch.cuda.device_count() > 1: # for using multiple GPUs
         print(f"Sử dụng {torch.cuda.device_count()} GPUs!")
         model = nn.DataParallel(model)
     optimizer = optim.Adam(
@@ -83,7 +83,7 @@ def main():
         if config.SAVE_MODEL:
             save_checkpoint(model, optimizer, config.CHECKPOINT_SAVE_PATH)
 
-        if epoch > 0 and epoch % 3 == 0:
+        if epoch > 0 and epoch % 1 == 0:
             check_class_accuracy(model, test_loader, threshold=config.CONF_THRESHOLD)
             pred_boxes, true_boxes = get_evaluation_bboxes(
                 test_loader,
