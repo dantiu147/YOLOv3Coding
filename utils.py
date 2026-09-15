@@ -425,7 +425,7 @@ def get_mean_std(loader):
     return mean, std
 
 
-def save_checkpoint(model, optimizer, filename="my_checkpoint.pth.tar"):
+def save_checkpoint(model, optimizer, filename="my_checkpoint.pth.tar"): # very useful
     print("=> Saving checkpoint")
     checkpoint = {
         "state_dict": model.state_dict(),
