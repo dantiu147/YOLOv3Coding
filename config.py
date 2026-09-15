@@ -7,7 +7,7 @@ import torch
 from albumentations.pytorch import ToTensorV2
 from utils import seed_everything
 
-DATASET = '/kaggle/input/datasets/sannapersson/yolov3-weights-for-pascal-voc-with-781-map'
+DATASET = 'PASCAL_VOC'
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 # seed_everything()  # If you want deterministic behavior
 NUM_WORKERS = 4
@@ -16,7 +16,7 @@ IMAGE_SIZE = 416
 NUM_CLASSES = 20
 LEARNING_RATE = 1e-5
 WEIGHT_DECAY = 0#1e-4
-NUM_EPOCHS = 50
+NUM_EPOCHS = 100
 CONF_THRESHOLD = 0.05
 MAP_IOU_THRESH = 0.5
 NMS_IOU_THRESH = 0.45
