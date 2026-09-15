@@ -8,7 +8,7 @@ class YoloLoss(nn.Module):
     def __init__(self):
         super().__init__()
         self.mse = nn.MSELoss() # for box prediction
-        self.bce = nn.BCELoss() # bce is sigmoid cross entropy loss
+        self.bce = nn.BCEWithLogitsLoss() # bce is sigmoid cross entropy loss
         self.entropy = nn.CrossEntropyLoss() # crossentropy is softmax cross entropy loss
         self.sigmoid = nn.Sigmoid()
 
@@ -27,7 +27,7 @@ class YoloLoss(nn.Module):
 
         # No object loss
         no_object_loss = self.bce(
-            torch.sigmoid(predictions[..., 0:1][noobj]), target[..., 0:1][noobj] # it's called slicing and boolean mask indexing and it's new to me # predictions[..., 0:1] phải hơn noobj 1 chiều để boolean mask indexing không bị lỗi 
+            predictions[..., 0:1][noobj], target[..., 0:1][noobj] # it's called slicing and boolean mask indexing and it's new to me # predictions[..., 0:1] phải hơn noobj 1 chiều để boolean mask indexing không bị lỗi 
             # (predictions[..., 0:1][noobj]) will return a 1D tensor of confidence score of cells and anchors
             # (target[..., 0:1][noobj]) will return 1D tensor of zeros, that means there no object in those cells and anchors
         )
@@ -36,7 +36,7 @@ class YoloLoss(nn.Module):
         box_preds = torch.cat([self.sigmoid(predictions[..., 1:3]), torch.exp(predictions[..., 3:5]) * anchors], dim=-1) # sigmoid(predictions[...,1:3]) is to make sure the coordinate is between 0-1, [B,3,13,13,2]*[1,3,1,1,2](broadcasting)
         # cái thực chất mô hình đoán ra đó là t_w và t_h, còn w thực sự là anchor_w * exp(t_w) và tương tự với h
         ious = intersection_over_union(box_preds[obj], target[..., 1:5][obj]).detach() # compute the iou of the box predictions and the target bounding boxes, only for the cells and anchors that have objects
-        object_loss = self.bce(torch.sigmoid(predictions[..., 0:1][obj]), (ious * target[..., 0:1][obj])) 
+        object_loss = self.bce(predictions[..., 0:1][obj], (ious * target[..., 0:1][obj])) 
         # việc tính loss ở đây không chỉ tính giữa việc có obj ở những cell hay anchor hay không
         # việc tính loss ở đây là tính giữa việc đoán có object là bao nhiêu phần trăm và so sánh với hiệu quả của việc đoán bouding box có tốt không
         # tránh trường hợp cell dự đoán là có object, nhưng bouding box thì không trùng với vật thể
