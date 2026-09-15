@@ -77,7 +77,7 @@ def main():
         train_fn(test_loader, model, optimizer, loss_fn, scaler, scaled_anchors)
 
         if config.SAVE_MODEL:
-            save_checkpoint(model, optimizer)
+            save_checkpoint(model, optimizer, config.CHECKPOINT_SAVE_PATH)
 
         if epoch > 0 and epoch % 3 == 0:
             check_class_accuracy(model, test_loader, threshold=config.CONF_THRESHOLD)

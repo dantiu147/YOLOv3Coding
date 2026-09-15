@@ -25,6 +25,7 @@ PIN_MEMORY = True
 LOAD_MODEL = True
 SAVE_MODEL = True
 CHECKPOINT_FILE = "checkpoint.pth.tar" 
+CHECKPOINT_SAVE_PATH= "my_checkpoint.pth.tar"
 IMG_DIR = DATASET + "/images/"
 LABEL_DIR = DATASET + "/labels/"
 
