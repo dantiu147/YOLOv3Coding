@@ -55,9 +55,9 @@ def train_fn(train_loader, model, optimizer, loss_fn, scaler, scaled_anchors): #
 
 def main():
     model = YOLOv3(num_classes=config.NUM_CLASSES).to(config.DEVICE) # create model, moving model to GPU
-    if torch.cuda.device_count() > 1: # for using multiple GPUs
-        print(f"Sử dụng {torch.cuda.device_count()} GPUs!")
-        model = nn.DataParallel(model)
+    # if torch.cuda.device_count() > 1: # for using multiple GPUs
+    #     print(f"Sử dụng {torch.cuda.device_count()} GPUs!")
+    #     model = nn.DataParallel(model)
     optimizer = optim.Adam(
         model.parameters(), lr=config.LEARNING_RATE, weight_decay=config.WEIGHT_DECAY
     )
