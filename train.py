@@ -78,13 +78,14 @@ def main():
     ).to(config.DEVICE) # anchor is a tensor
 
     for epoch in range(config.NUM_EPOCHS):
+        # train model
         train_fn(test_loader, model, optimizer, loss_fn, scaler, scaled_anchors)
 
         if config.SAVE_MODEL:
             save_checkpoint(model, optimizer, config.CHECKPOINT_SAVE_PATH)
 
-        if epoch > 0 and epoch % 1 == 0:
-            check_class_accuracy(model, test_loader, threshold=config.CONF_THRESHOLD)
+        if epoch > 0 and epoch % 10 == 0:
+            check_class_accuracy(model, test_loader, threshold=config.CONF_THRESHOLD) # Check the accuracy of each class
             pred_boxes, true_boxes = get_evaluation_bboxes(
                 test_loader,
                 model,
@@ -92,7 +93,7 @@ def main():
                 anchors=config.ANCHORS,
                 threshold=config.CONF_THRESHOLD,
             )
-            mapval = mean_average_precision(
+            mapval = mean_average_precision( # caculate MAP
                 pred_boxes,
                 true_boxes,
                 iou_threshold=config.MAP_IOU_THRESH,
