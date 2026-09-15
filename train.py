@@ -5,6 +5,7 @@ import torch
 import torch.optim as optim # optimizer ?
 
 from model import YOLOv3
+import torch.nn as nn
 
 from tqdm import tqdm # tell me the progress of the training
 from utils import (
@@ -54,6 +55,9 @@ def train_fn(train_loader, model, optimizer, loss_fn, scaler, scaled_anchors): #
 
 def main():
     model = YOLOv3(num_classes=config.NUM_CLASSES).to(config.DEVICE) # create model, moving model to GPU
+    if torch.cuda.device_count() > 1:
+        print(f"Sử dụng {torch.cuda.device_count()} GPUs!")
+        model = nn.DataParallel(model)
     optimizer = optim.Adam(
         model.parameters(), lr=config.LEARNING_RATE, weight_decay=config.WEIGHT_DECAY
     )
