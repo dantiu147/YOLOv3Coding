@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pth.tar
+*.pth
+*.pt
+PASCAL_VOC/
