@@ -83,7 +83,7 @@ def main():
         if config.SAVE_MODEL:
             save_checkpoint(model, optimizer, config.CHECKPOINT_SAVE_PATH)
 
-        if epoch > 0 and epoch % 10 == 0:
+        if epoch > 0 and epoch % 3 == 0:
             check_class_accuracy(model, test_loader, threshold=config.CONF_THRESHOLD)
             pred_boxes, true_boxes = get_evaluation_bboxes(
                 test_loader,
